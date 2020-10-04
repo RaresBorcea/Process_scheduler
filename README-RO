@@ -1,0 +1,55 @@
+============== Tema 4 SO ================
+Borcea Rareș Ioan; Grupa 334CC; 2019-2020
+
+(!) Explicațiile din README trebuie coroborate comentariilor ce însoțesc codul,
+pentru a putea înțelege în totalitate implementarea.
+Detaliile sunt explicate doar în dreptul codului uneia dintre platforme,
+acțiunile fiind duplicate în aceeași ordine și în secvența de cod corespunză-
+toare celeilalte.
+
+1. Organizare
+Tema respectă principiul încapsulării datelor. Fișierul so_scheduler.h a
+fost păstrat nemodificat, în vreme ce pentru toate celelalte structuri de
+date au fost declarate, după caz, fișiere header și, eventual, cod sursă:
+pentru Scheduler - scheduler.h, pentru Thread-uri - thread.h, pentru
+coadă - queue.c, respectiv queue.h.
+Fișierul principal cuprinde strict implementarea funcțiilor de bibliotecă.
+Despre utilitatea temei: am simțit o încărcare relativ rezonabilă
+și am învățat și lucruri noi; am aprofundat în special aspectele care țin
+de sistemul de operare Windows, cu care nu am interacționat la fel de
+mult în cadrul laboratoarelor.
+Despre eficiența implementării în sine, consider că abordarea curentă
+aduce o performanță acceptabilă, ținând cont de modul în care este imple-
+mentată structura planificatorului, urmărind strict structura propusă de
+algoritmul Round-Robin, în care pentru fiecare tip de prioritate există
+o coadă dedicată.
+
+2. Implementare
+S-a realizat implementarea întregului enunț al temei, astfel încât rula-
+rea să fie posibilă pe ambele platforme.
+Pentru marcarea problemelor semnalate la alocarea memoriei, lucrul cu se-
+mafoare, mutex-uri/zone critice etc., s-a utilizat macro-ul DIE în mod
+asemănător pentru ambele platforme, pentru a nu continua o execuție cu
+caracter nedefinit.
+Un thread maximizează cuanta de rulare, fiind înlocuit doar la expirarea
+acesteia sau la apariția în planificator a unui thread cu prioritate strict
+mai mare.
+Caracterul original al implementării este dat de unicitatea codului sursă,
+existând o singură arhivă pentru ambele platforme, selecția realizându-se
+la compilare, prin makefile-ul diferențiat.
+Planificarea s-a folosit de semafoare pentru a bloca/anunța reluarea exe-
+cuției unui thread și de mutex-uri pe Linux, respectiv zone critice pe
+Windows, pentru a sincroniza accesul la cozile cu thread-uri din planifi-
+cator. Tot printr-un semafor s-a realizat și anunțarea thread-ului părinte
+după finalizarea planificării thread-ului copil, în urma operației so_fork.
+
+3. Cum se compilează și cum se rulează?
+Tema cuprinde cele 2 fișiere Makefile, câte unul corespunzător fiecărei
+platforme, cu reguli de build și clean și structuri asemănătoare celei
+din laboratoare.
+Fiind vorba de o bibliotecă, rularea nu se face efectiv, ci prin inter-
+mediul unor programe ce importă funcțiile de bibliotecă.
+
+4. Bibliografie
+Makefile-uri - echipa SO
+Baza implementării pentru coadă - Lab SD (Mihai Nan)
